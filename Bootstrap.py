@@ -35,7 +35,7 @@ class Bootstrap:
                     self.H[i, j] = self.H[j, i] = self.matrix_el_fnc(i, j)
     
     
-    def is_Eigen(self, n, allowed = 1, not_allowed = 0):
+    def is_Eigen(self, n: int, allowed = 1, not_allowed = 0):
         
         i = 1
 
@@ -48,3 +48,27 @@ class Bootstrap:
         
         else:
             return not_allowed
+    
+
+    def is_Eigen_Multi_K(self, k_list, allowed = 1, not_allowed = 0):
+
+        i = 1
+        k_allowed = []
+        k_list = sorted(k_list)
+
+        while i <= k_list[-1]:
+            
+            tmp_minor = det(self.H[0: i, 0: i])
+            
+            if tmp_minor >= 0 and i in k_list:
+
+                k_allowed.append(allowed)
+                i += 1
+                
+            elif tmp_minor < 0:
+                break
+            
+            else:
+                i += 1
+        
+        return k_allowed + [not_allowed]*(len(k_list) - len(k_allowed))
